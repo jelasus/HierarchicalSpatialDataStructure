@@ -1,0 +1,2 @@
+/home/jesus/HierarchicalSpatialDataStructure/main.cpp:1:23: fatal error: graphNodes.h: No such file or directory
+compilation terminated.

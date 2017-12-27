@@ -1,11 +1,9 @@
-#include"quadtree.h"
+#include"graphNodes.h"
+#include<iostream>
 main(){
-  Quadtree<int>* Quad = new Quadtree<int>(8,8);
-  //Quad->insert(Point(0,1),3);
-  //Quad->insert(Point(0,2),2);
-  Quad->insert(Point(1,1),4);
-  Quad->find(Point(1,1));
-  //Quad->find(Point(0,1));
-  //Quad->find(Point(0,2));
+  Vertex<int> a(2);
+  Vertex<int> b(3);
+  if (a>2)
+    std::cout << "a es menor que b";
   return 0;
 }
