@@ -1,9 +1,15 @@
-#include"graphNodes.h"
-#include<iostream>
-main(){
-  Vertex<int> a(2);
-  Vertex<int> b(3);
-  if (a>2)
-    std::cout << "a es menor que b";
-  return 0;
+#include "Octree.h"
+#include <iostream>
+using namespace std;
+
+int main(){
+    vector3 A(1,2,3);
+    vector3 B(2,3,4);
+    vector3 C;
+    C=A+B;
+    cout<<C.x<<C.y<<C.z<<endl;
+    OctreeNode Nodo;
+    OctreeNode Nodoo(C);
+    Octree O(A,B);
+    return 0;
 }
