@@ -2,7 +2,7 @@
 #define Vector3_h_
 #include <cmath>
 #include<iostream>
-typedef unsigned int coordinate;
+typedef float coordinate;
 class Point{
     public:
         coordinate x;
@@ -43,8 +43,12 @@ class Point{
           if (x == p.x && y == p.y && z == p.z) return true;
           return false;
         }
-        coordinate getXmid(const Point &o) {return (this->x + o.x)>>1;}
-        coordinate getYmid(const Point &o) {return (this->y + o.y)>>1;}
-        coordinate getZmid(const Point &o) {return (this->z + o.z)>>1;}
+        bool operator!=(const Point& p){
+          if (x != p.x || y != p.y || z != p.z) return true;
+          return false;
+        }
+        coordinate getXmid(const Point &o) {return (this->x + o.x)*.5f;}
+        coordinate getYmid(const Point &o) {return (this->y + o.y)*.5f;}
+        coordinate getZmid(const Point &o) {return (this->z + o.z)*.5f;}
 };
 #endif

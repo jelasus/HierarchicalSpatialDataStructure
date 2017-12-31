@@ -5,60 +5,63 @@
 typedef int pcd_size;
 class Octree{
 public:
-  Point m_base; //punto base
-  Point m_top; //punto alto
+  Point m_middle; //punto base
+  Point m_radixs; //punto alto
   Octree *father; //puntero hacia el padre
   Octree *m_child[8];
-  Content *m_data;
+  Point *m_data;
 public:
-  Octree(Point a): m_base(Point(0,0,0)), m_top(a), m_data(0){
+	Octree(Point a,Point b): m_middle(a), m_radixs(b), m_data(0){
     for(int i = 0; i < 8; ++i)
 			m_child[i] = 0;
 	}
-	Octree(Point a,Point b): m_base(a), m_top(b), m_data(0){
-    for(int i = 0; i < 8; ++i)
-			m_child[i] = 0;
-	}
-  Octree(pcd_size x, pcd_size y, pcd_size z): m_base(Point(0,0,0)), m_top(Point(x,y,z)), m_data(0){
+  Octree(pcd_size x, pcd_size y, pcd_size z):m_data(0){
+    Point m(x*.5f,y*.5f,z*.5f);
+    this->m_middle = m;
+    this->m_radixs = m;
     for(int i = 0; i < 8; ++i)
 			m_child[i] = 0;
   }
-  Octree(pcd_size x, pcd_size y, pcd_size z, char* file): m_base(Point(0,0,0)), m_top(Point(x,y,z)), m_data(0){
-    for(int i = 0; i < 8; ++i)
-			m_child[i] = 0;
+  Octree(char* file){
     build_image(file);
   }
 	~Octree(){
 		for(int i=0; i<8; ++i)
 			delete m_child[i];
 	}
-/*  bool isempty(){
+  bool isempty(){
     if (this)
-      return true;
-    return false;
-  }*/
-  void build_image(char* textfile){}
-  void insert(Point& pixel, Content& color){
-    std::cout << this->m_base << " , " << this->m_top << std::endl;
-    if (is_leaf()){ //si es un pixel
-      if (this->m_data == 0)
-        set_content(color); //si no existe el punto, le asigna el color
-      return; //no hace nada si ya existe el punto
-    }
-    else { //por lo tanto es un nodo interior
-      int posicion = get_posicion_child(pixel);
-      if(!(this->m_child[posicion])){
-        std::cout << "NEW NODE CREATED" << std::endl;
-        Point new_base;
-        Point new_top;
-        set_position(pixel,new_base,new_top);
-        this->m_child[posicion] = new Octree(new_base, new_top);
-      }
-      this->m_child[posicion]->insert(pixel,color); // recursivamente hasta que encuentra el punto
-    }
+      return false;
+    return true;
   }
-  void search(Point pixel){
-
+  void build_image(char* textfile){}
+  void insert(Point& pixel){
+    std::cout << this->m_middle << " , " << this->m_radixs << " , " << pixel << std::endl;
+    if (this->m_child[0] == NULL){ //si no tiene hijos, es una hoja
+      if (this->m_data == NULL){
+        this->m_data = &pixel;
+        std::cout << "NODE CREATED" << std::endl;
+        return;
+      }
+      else if(*this->m_data != pixel){ //si no es el mismo punto
+        for(int i = 0; i < 8; ++i){
+          Point p_new = this->m_middle;
+          p_new.x += this->m_radixs.x * (i&1 ? 0.5f : -0.5f);
+          p_new.y += this->m_radixs.y * (i&2 ? 0.5f : -0.5f);
+          p_new.z += this->m_radixs.z * (i&4 ? 0.5f : -0.5f);
+          this->m_child[i] = new Octree(p_new, this->m_radixs * 0.5f);
+          this->m_child[i]->father = this;
+        }
+        Point old_pixel = *this->m_data;
+        this->m_data = NULL;
+        this->insert(old_pixel);
+        this->insert(pixel);
+      }
+    }
+    else
+      this->m_child[get_posicion_child(pixel)]->insert(pixel);
+  }
+  void search(Point& pixel){
   }
 private:
   /*enum child{
@@ -71,25 +74,15 @@ private:
     BottomRightBack,
     TopRightBack
   };*/
-  bool is_leaf() {
-    return (m_base + 1 == m_top) ? true : false;
-  }
   void set_position(Point& p, Point& a, Point& b){
-    coordinate midX = this->m_base.getXmid(this->m_top);
-    coordinate midY = this->m_base.getYmid(this->m_top);
-    coordinate midZ = this->m_base.getZmid(this->m_top);
-    a = this->m_base;
-    b = Point(midX, midY, midZ);
-    if (p.x > midX){a.x = midX; b.x = this->m_top.x;}
-    if (p.y > midY){a.y = midY; b.y = this->m_top.y;}
-    if (p.z > midZ){a.z = midZ; b.z = this->m_top.z;}
+
   }
-  void set_content(const Content& color) {this->m_data = new Content(color);}
+  void set_content(const Point& color) {this->m_data = new Point(color);}
   int get_posicion_child(const Point& p) {
     int posicion = 0;
-    if(this->m_base.getXmid(this->m_top) < p.x) posicion |= 1;
-    if(this->m_base.getYmid(this->m_top) < p.y) posicion |= 2;
-    if(this->m_base.getZmid(this->m_top) < p.z) posicion |= 4;
+    if (p.x >= this->m_middle.x) posicion += 1;
+    if (p.y >= this->m_middle.y) posicion += 2;
+    if (p.z >= this->m_middle.z) posicion += 4;
     return posicion;
   }
 };
