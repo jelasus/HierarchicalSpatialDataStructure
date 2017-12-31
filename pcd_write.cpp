@@ -8,8 +8,8 @@ int
   pcl::PointCloud<pcl::PointXYZ> cloud;
 
   // Fill in the cloud data
-  cloud.width    = 5;
-  cloud.height   = 1;
+  cloud.width    = 16;
+  cloud.height   = 16;
   cloud.is_dense = false;
   cloud.points.resize (cloud.width * cloud.height);
 
