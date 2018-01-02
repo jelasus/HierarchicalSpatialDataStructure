@@ -2,7 +2,12 @@
 #define Octree_H
 #include "OctreeNode.h"
 #include<iostream>
+#include<map>
+#include<fstream>
+#include<string>
+#include <sstream>
 typedef int pcd_size;
+using namespace std;
 class Octree{
 public:
   Point m_middle; //punto base
@@ -22,8 +27,10 @@ public:
     for(int i = 0; i < 8; ++i)
 			m_child[i] = 0;
   }
-  Octree(char* file){
-    build_image(file);
+  Octree(char* file): m_data(0){
+    for(int i = 0; i < 8; ++i)
+      m_child[i] = 0;
+    read_off(file);
   }
 	~Octree(){
 		for(int i=0; i<8; ++i)
@@ -34,12 +41,54 @@ public:
       return false;
     return true;
   }
-  void build_image(char* textfile){}
-  void insert(Point& pixel){
-    std::cout << this->m_middle << " , " << this->m_radixs << " , " << pixel << std::endl;
+  typedef int key;
+  void read_off(char* &off_file){
+    ifstream file(off_file);
+    string line;
+    getline(file, line);
+    line = line.substr(0,3);
+    if(line != "OFF"){
+      cout << "Error: File name is not .off extension" << endl;
+      return;
+    }
+    map<key, Point*> l_vertex;
+    int vertexs, faces;
+    /////////////////////////
+    getline(file,line);
+    get_limits(vertexs, faces, line);
+    //////////////////////////
+    cout << vertexs << " " << faces << endl;
+    coordinate vx, vy, vz;
+    Point point1, point2;
+    getline(file, line);
+    get_vertex(vx, vy, vz, line);
+    Point *f_point = new Point(vx,vy,vz);
+    l_vertex.insert(std::pair<key,Point*>(0,f_point));
+    cout << "Reading.. " << *(l_vertex[0]) << endl;
+    point1 = point2 = Point(vx,vy,vz);
+    for(int i = 1; i < vertexs; ++i){
+      getline(file,line);
+      get_vertex(vx, vy, vz, line);
+      set_max(vx, vy, vz, point2);
+      set_min(vx, vy, vz, point1);
+      Point *p_vertex = new Point(vx, vy, vz);
+      l_vertex.insert(std::pair<key,Point*>(i,p_vertex));
+      cout << "Reading.. " << *(l_vertex[i]) << endl;
+    }
+    this->m_middle = (point1 + point2) * 0.5f;
+    this->m_radixs = point2 - m_middle;
+    cout << m_middle << " " << m_radixs << endl;
+    cout << "inserting.. " << endl;
+    for(map<key,Point*>::iterator it = l_vertex.begin(); it != l_vertex.end(); ++it){
+      this->insert(*(it->second));
+    }
+
+  }
+  void insert(const Point& pixel){
+    cout << this->m_middle << " , " << this->m_radixs << " , " << pixel << endl;
     if (this->m_child[0] == NULL){ //si no tiene hijos, es una hoja
       if (this->m_data == NULL){
-        this->m_data = &pixel;
+        this->m_data = const_cast<Point*>(&pixel);
         std::cout << "NODE CREATED" << std::endl;
         return;
       }
@@ -76,6 +125,32 @@ private:
   };*/
   void set_position(Point& p, Point& a, Point& b){
 
+  }
+  void set_max(const coordinate &vx, const coordinate &vy, const coordinate &vz, Point &max){
+    if (vx > max.x) {max.x = vx;}
+    if (vy > max.y) {max.y = vy;}
+    if (vz > max.z) {max.z = vz;}
+  }
+  void set_min(const coordinate &vx, const coordinate &vy, const coordinate &vz, Point &min){
+    if (vx < min.x) {min.x = vx;}
+    if (vy < min.y) {min.y = vy;}
+    if (vz < min.z) {min.z = vz;}
+  }
+  void get_vertex(coordinate &vx, coordinate &vy, coordinate &vz,const string &line){
+    int limit1, limit2, limit3;
+    limit1 = line.find(" ", 0);
+    vx = stof(line.substr(0,limit1));
+    limit2 = line.find(" ", limit1+1);
+    vy = stof(line.substr(limit1+1,limit2- limit1 -1));
+    limit3 = line.find(" ", limit2+1);
+    vz = stof(line.substr(limit2+1,limit3- limit2 -limit1 -1));
+  }
+  void get_limits(int &vertexs, int &faces, string &line){
+    int limit1, limit2;
+    limit1 = line.find(" ", 0);
+    vertexs = stoi(line.substr(0,limit1));
+    limit2 = line.find(" ", limit1+1) - limit1 - 1;
+    faces = stoi(line.substr(limit1+1,limit2));
   }
   void set_content(const Point& color) {this->m_data = new Point(color);}
   int get_posicion_child(const Point& p) {

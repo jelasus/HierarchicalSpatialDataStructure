@@ -23,6 +23,10 @@ class Point{
           stream << "x: " << o.x << " y: " << o.y << " z: " << o.z;
           return stream;
         }
+        friend std::ostream& operator<<(std::ostream& stream,const Point& o){
+          stream << "x: " << o.x << " y: " << o.y << " z: " << o.z;
+          return stream;
+        }
         Point& operator+=(const Point& r) {
             x+=r.x;
             y+=r.y;
