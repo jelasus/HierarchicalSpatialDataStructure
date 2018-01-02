@@ -1,15 +1,9 @@
 #ifndef OctreeNode_H
 #define OctreeNode_H
-#include "Vector3.h"
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
 
-
-struct Pixel{
-  int r;
-  int g;
-  int b;
-  Pixel(): r(0), g(0), b(0) {}
-  Pixel(int _r, int _g, int _b): r(_r), g(_g), b(_b) {}
+class Data: pcl::PointXYZ{
+  
 };
-
-
 #endif
