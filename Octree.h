@@ -24,18 +24,18 @@ public:
 public:
 	Octree(Point a,Point b): m_middle(a), m_radixs(b), m_data(0), father(0){
     for(int i = 0; i < 8; ++i)
-			m_child[i] = 0;
+			this->m_child[i] = 0;
 	}
   Octree(pcd_size x, pcd_size y, pcd_size z):m_data(0), father(0){
     Point m(x*.5f,y*.5f,z*.5f);
     this->m_middle = m;
     this->m_radixs = m;
     for(int i = 0; i < 8; ++i)
-			m_child[i] = 0;
+			this->m_child[i] = 0;
   }
   Octree(): m_data(0), father(0){
     for(int i = 0; i < 8; ++i)
-      m_child[i] = 0;
+      this->m_child[i] = 0;
   }
 	~Octree(){
 		for(int i=0; i<8; ++i)
@@ -54,7 +54,11 @@ public:
         std::cout << "NODE CREATED" << std::endl;
         return;
       }
-      else{ //si no es el mismo punto
+      else if(pixel.x == this->m_data->x && pixel.y == this->m_data->y && pixel.z == this->m_data->z){ //si es el mismo punto
+        cout << "The point is already here" << endl;
+        return;
+      }
+      else{
         for(int i = 0; i < 8; ++i){
           Point p_new = this->m_middle;
           p_new.x += this->m_radixs.x * (i&1 ? 0.5f : -0.5f);
