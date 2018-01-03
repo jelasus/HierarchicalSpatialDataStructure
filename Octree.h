@@ -1,6 +1,6 @@
 #ifndef Octree_H
 #define Octree_H
-#include"Vector3.h"
+#include"pointXYZ.h"
 #include<iostream>
 #include<map>
 #include<fstream>
