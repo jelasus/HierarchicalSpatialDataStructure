@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/jesus/HierarchicalSpatialDataStructure/pcd_write.cpp" "/home/jesus/HierarchicalSpatialDataStructure/build/CMakeFiles/pcd_write_test.dir/pcd_write.cpp.o"
+  "/home/jesus/HierarchicalSpatialDataStructure/main.cpp" "/home/jesus/HierarchicalSpatialDataStructure/build/CMakeFiles/main.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -17,11 +17,13 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
   "DISABLE_OPENNI2"
   "DISABLE_PCAP"
   "DISABLE_PNG"
-  "DISABLE_VTK"
+  "DISABLE_RSSDK"
+  "qh_QHpointer"
   )
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/usr/include/vtk-5.10"
   "/usr/local/include/pcl-1.8"
   "/usr/include/eigen3"
   "/usr/include/ni"

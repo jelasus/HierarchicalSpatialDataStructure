@@ -111,44 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named cloud_viewer
+# Target rules for targets named main
 
 # Build rule for target.
-cloud_viewer: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 cloud_viewer
-.PHONY : cloud_viewer
+main: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main
+.PHONY : main
 
 # fast build rule for target.
-cloud_viewer/fast:
-	$(MAKE) -f CMakeFiles/cloud_viewer.dir/build.make CMakeFiles/cloud_viewer.dir/build
-.PHONY : cloud_viewer/fast
+main/fast:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
+.PHONY : main/fast
 
-cloud_viewer.o: cloud_viewer.cpp.o
+main.o: main.cpp.o
 
-.PHONY : cloud_viewer.o
+.PHONY : main.o
 
 # target to build an object file
-cloud_viewer.cpp.o:
-	$(MAKE) -f CMakeFiles/cloud_viewer.dir/build.make CMakeFiles/cloud_viewer.dir/cloud_viewer.cpp.o
-.PHONY : cloud_viewer.cpp.o
+main.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.o
+.PHONY : main.cpp.o
 
-cloud_viewer.i: cloud_viewer.cpp.i
+main.i: main.cpp.i
 
-.PHONY : cloud_viewer.i
+.PHONY : main.i
 
 # target to preprocess a source file
-cloud_viewer.cpp.i:
-	$(MAKE) -f CMakeFiles/cloud_viewer.dir/build.make CMakeFiles/cloud_viewer.dir/cloud_viewer.cpp.i
-.PHONY : cloud_viewer.cpp.i
+main.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.i
+.PHONY : main.cpp.i
 
-cloud_viewer.s: cloud_viewer.cpp.s
+main.s: main.cpp.s
 
-.PHONY : cloud_viewer.s
+.PHONY : main.s
 
 # target to generate assembly for a file
-cloud_viewer.cpp.s:
-	$(MAKE) -f CMakeFiles/cloud_viewer.dir/build.make CMakeFiles/cloud_viewer.dir/cloud_viewer.cpp.s
-.PHONY : cloud_viewer.cpp.s
+main.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.s
+.PHONY : main.cpp.s
 
 # Help Target
 help:
@@ -158,10 +158,10 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... cloud_viewer"
-	@echo "... cloud_viewer.o"
-	@echo "... cloud_viewer.i"
-	@echo "... cloud_viewer.s"
+	@echo "... main"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 .PHONY : help
 
 

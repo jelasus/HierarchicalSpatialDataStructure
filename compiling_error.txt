@@ -1,3 +1,6 @@
-/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/crt1.o: In function `_start':
-(.text+0x20): undefined reference to `main'
-collect2: error: ld returned 1 exit status
+In file included from /home/jesus/HierarchicalSpatialDataStructure/visualizate.h:1:0,
+                 from /home/jesus/HierarchicalSpatialDataStructure/main.cpp:1:
+/home/jesus/HierarchicalSpatialDataStructure/Octree.h:9:26: fatal error: pcl/io/pcd_io.h: No such file or directory
+ #include<pcl/io/pcd_io.h>
+                          ^
+compilation terminated.

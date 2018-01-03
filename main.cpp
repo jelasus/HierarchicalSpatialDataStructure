@@ -2,10 +2,11 @@
 using namespace std;
 
 int main(int argc, char** argv){
-  //Octree *tree = new Octree();
-  //read_off_file("/home/jesus/HierarchicalSpatialDataStructure/klingon.off", tree);
-  //cout << "end";
-  Octree a(4,4,4);
+  Octree *tree = new Octree();
+  VisualPointCloud cloudtree(tree);
+  cloudtree.read_off_file("/home/jesus/HierarchicalSpatialDataStructure/off_files/klingon.off");
+  cout << "end";
+  /*Octree a(4,4,4);
   pcl::PointXYZ b(0,0,0);
   pcl::PointXYZ c(4,0,0);
   pcl::PointXYZ d(0,4,0);
@@ -21,6 +22,6 @@ int main(int argc, char** argv){
   a.insert(f);
   a.insert(g);
   a.insert(h);
-  a.insert(i);
+  a.insert(i);*/
   return 0;
 }

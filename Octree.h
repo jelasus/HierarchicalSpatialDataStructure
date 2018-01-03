@@ -8,8 +8,6 @@
 #include<vector>
 #include<pcl/io/pcd_io.h>
 #include<pcl/point_types.h>
-#include <pcl/visualization/cloud_viewer.h>
-#include<pcl/PCLPointCloud2.h>
 typedef float pcd_size;
 typedef int key;
 typedef pcl::PointXYZ Data;
@@ -79,16 +77,6 @@ public:
   void search(Point& pixel){
   }
 public:
-  /*enum child{
-    BottomLeftFront = 0,
-    TopLeftFront,
-    BottomRightFront,
-    TopRightFront,
-    BottomLeftBack,
-    TopLeftBack,
-    BottomRightBack,
-    TopRightBack
-  };*/
   void set_position(Point& p, Point& a, Point& b){
 
   }
