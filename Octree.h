@@ -8,6 +8,7 @@
 #include<vector>
 #include<pcl/io/pcd_io.h>
 #include<pcl/point_types.h>
+#include<cmath>
 typedef float pcd_size;
 typedef int key;
 typedef pcl::PointXYZ Data;
@@ -16,7 +17,6 @@ class Octree{
 public:
   Point m_middle; //punto base
   Point m_radixs; //punto alto
-  Octree *father; //puntero hacia el padre
   Octree *m_child[8];
   Data *m_data;
 public:
@@ -63,7 +63,6 @@ public:
           p_new.y += this->m_radixs.y * (i&2 ? 0.5f : -0.5f);
           p_new.z += this->m_radixs.z * (i&4 ? 0.5f : -0.5f);
           this->m_child[i] = new Octree(p_new, this->m_radixs * 0.5f);
-          this->m_child[i]->father = this;
         }
         Data old_pixel = *this->m_data;
         this->m_data = NULL;
@@ -74,13 +73,12 @@ public:
     else
       this->m_child[get_posicion_child(pixel)]->insert(pixel);
   }
-  pcl::PointCloud<pcl::PointXYZ> & radial_neighbor_search(Point& pixel,float radix){
+  /*pcl::PointCloud<pcl::PointXYZ> & radial_neighbor_search(Point& pixel,float radix){
     pcl::PointCloud<pcl::PointXYZ> v;
     recursive_radial_neighbor_search(pixel, radix, v);
     return v;
-  }
-public:
-  void recursive_radial_neighbor_search(Point &pixel,float &radix,pcl::<pcl::PointXYZ> &v){
+  }*/
+  /*void recursive_radial_neighbor_search(Point &pixel,float &radix,pcl::<pcl::PointXYZ> &v){
     if(!(overloap(pixel, radix)))
       return;
     else{
@@ -94,6 +92,71 @@ public:
     }
   }
   bool overloap(Point &pixel, float &radix){
+    Point mid(abs(pixel.x-this->m_middle.x),abs(pixel.y-this->m_middle.y),abs(pixel.z-this->m_middle.z));
+    float p_max = max(mid.x,mid.y,mid.z);
+    float p_min = min(mid.x,mid.y,mid.z);
+  }*/
+  public:
+  void search(Data pixel){
+	  if (this->m_child[0] == NULL){
+		  if (this->m_data != NULL){
+			  if (pixel.x == this->m_data->x && pixel.y == this->m_data->y && pixel.z == this->m_data->z){
+				  cout << "Encontrado" << endl;
+				  cout << *m_data << endl;
+			  }
+		  }
+	  }
+	  else{
+		  this->m_child[get_posicion_child(pixel)]->search(pixel);
+	  }
+  }
+
+  void RadiusNeighbors(Point center, float radius, vector<Data*> &Points){
+    Point p_min = center - radius;
+    Point p_max = center + radius;
+    if(m_child[0]==NULL){
+      if(m_data!=NULL){
+            Data *p = this->m_data;
+            if(p->x > p_max.x || p->y > p_max.y || p->z > p_max.z) return;
+            if(p->x < p_min.x || p->y < p_min.y || p->z < p_min.z) return;
+			Points.push_back(this->m_data);
+      }
+    }
+    else{
+      for(int i=0;i<8;i++){
+        Point p_max_ = m_child[i]->m_middle + m_child[i]->m_radixs;
+        Point p_min_ = m_child[i]->m_middle - m_child[i]->m_radixs;
+
+        if(p_max_.x < p_min.x || p_max_.y < p_min.y || p_max_.z < p_min.z) continue;
+        if(p_min_.x > p_max.x || p_min_.y > p_max.y || p_min_.z > p_max.z) continue;
+
+		m_child[i]->RadiusNeighbors(center, radius, Points);
+      }
+    }
+
+  }
+  void RadiusNeighbors(Point center, float radius, vector<Data*> &Points){
+    Point p_min = center - radius;
+    Point p_max = center + radius;
+    if(m_child[0]==NULL){
+      if(m_data!=NULL){
+            Data *p = this->m_data;
+            if(p->x > p_max.x || p->y > p_max.y || p->z > p_max.z) return;
+            if(p->x < p_min.x || p->y < p_min.y || p->z < p_min.z) return;
+			Points.push_back(this->m_data);
+      }
+    }
+    else{
+      for(int i=0;i<8;i++){
+        Point p_max_ = m_child[i]->m_middle + m_child[i]->m_radixs;
+        Point p_min_ = m_child[i]->m_middle - m_child[i]->m_radixs;
+
+        if(p_max_.x < p_min.x || p_max_.y < p_min.y || p_max_.z < p_min.z) continue;
+        if(p_min_.x > p_max.x || p_min_.y > p_max.y || p_min_.z > p_max.z) continue;
+
+		m_child[i]->RadiusNeighbors(center, radius, Points);
+      }
+    }
 
   }
   void set_position(Point& p, Point& a, Point& b){
