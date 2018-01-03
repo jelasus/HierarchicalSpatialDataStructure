@@ -8,6 +8,11 @@
 #include<vector>
 #include<pcl/io/pcd_io.h>
 #include<pcl/point_types.h>
+<<<<<<< HEAD
+=======
+#include <pcl/visualization/cloud_viewer.h>
+#include<pcl/PCLPointCloud2.h>
+>>>>>>> f9304f53d0b1e17b89c7d1951d1a78bee734399e
 typedef float pcd_size;
 typedef int key;
 typedef pcl::PointXYZ Data;
@@ -19,9 +24,15 @@ public:
   Octree *father; //puntero hacia el padre
   Octree *m_child[8];
   Data *m_data;
+<<<<<<< HEAD
 public:
 	Octree(Point a,Point b): m_middle(a), m_radixs(b), m_data(0), father(0){
     for(int i = 0; i < 8; ++i)
+=======
+public:
+	Octree(Point a,Point b): m_middle(a), m_radixs(b), m_data(0), father(0){
+    for(int i = 0; i < 8; ++i)
+>>>>>>> f9304f53d0b1e17b89c7d1951d1a78bee734399e
 			this->m_child[i] = 0;
 	}
   Octree(pcd_size x, pcd_size y, pcd_size z):m_data(0), father(0){
@@ -35,9 +46,15 @@ public:
     for(int i = 0; i < 8; ++i)
       this->m_child[i] = 0;
   }
+<<<<<<< HEAD
 	~Octree(){
 		for(int i=0; i<8; ++i)
 			delete m_child[i];
+=======
+	~Octree(){
+		for(int i=0; i<8; ++i)
+			delete m_child[i];
+>>>>>>> f9304f53d0b1e17b89c7d1951d1a78bee734399e
 	}
   bool isempty(){
     if (this)
@@ -46,16 +63,30 @@ public:
   }
   void insert(Data& pixel){
     cout << this->m_middle << " , " << this->m_radixs << " , " << pixel << endl;
+<<<<<<< HEAD
     if (this->m_child[0] == NULL){ //si no tiene hijos, es una hoja
+=======
+
+    if (this->m_child[0] == NULL){ //si no tiene hijos, es una hoja
+      
+>>>>>>> f9304f53d0b1e17b89c7d1951d1a78bee734399e
       if (this->m_data == NULL){
         this->m_data = &pixel;
         std::cout << "NODE CREATED" << std::endl;
         return;
       }
+<<<<<<< HEAD
+=======
+
+>>>>>>> f9304f53d0b1e17b89c7d1951d1a78bee734399e
       else if(pixel.x == this->m_data->x && pixel.y == this->m_data->y && pixel.z == this->m_data->z){ //si es el mismo punto
         cout << "The point is already here" << endl;
         return;
       }
+<<<<<<< HEAD
+=======
+      
+>>>>>>> f9304f53d0b1e17b89c7d1951d1a78bee734399e
       else{
         for(int i = 0; i < 8; ++i){
           Point p_new = this->m_middle;
@@ -74,6 +105,7 @@ public:
     else
       this->m_child[get_posicion_child(pixel)]->insert(pixel);
   }
+<<<<<<< HEAD
   pcl::PointCloud<pcl::PointXYZ> & radial_neighbor_search(Point& pixel,float radix){
     pcl::PointCloud<pcl::PointXYZ> v;
     recursive_radial_neighbor_search(pixel, radix, v);
@@ -100,6 +132,61 @@ public:
 
 >>>>>>> fa27841fc5c368098ab6f458b3f63269745b601c
   }
+=======
+
+  void search(Data pixel){
+	  if (this->m_child[0] == NULL){
+		  if (this->m_data != NULL){
+			  if (pixel.x == this->m_data->x && pixel.y == this->m_data->y && pixel.z == this->m_data->z){
+				  cout << "Encontrado" << endl;
+				  cout << *m_data << endl;
+			  }
+		  }
+	  }
+	  else{
+		  this->m_child[get_posicion_child(pixel)]->search(pixel);
+	  }
+  }
+
+  void RadiusNeighbors(Point center, float radius, vector<Data*> &Points){
+    Point p_min = center - radius;
+    Point p_max = center + radius;
+    if(m_child[0]==NULL){
+      if(m_data!=NULL){
+            Data *p = this->m_data;
+            if(p->x > p_max.x || p->y > p_max.y || p->z > p_max.z) return;
+            if(p->x < p_min.x || p->y < p_min.y || p->z < p_min.z) return;
+			Points.push_back(this->m_data);
+      }
+    }
+    else{
+      for(int i=0;i<8;i++){
+        Point p_max_ = m_child[i]->m_middle + m_child[i]->m_radixs;
+        Point p_min_ = m_child[i]->m_middle - m_child[i]->m_radixs;
+
+        if(p_max_.x < p_min.x || p_max_.y < p_min.y || p_max_.z < p_min.z) continue;
+        if(p_min_.x > p_max.x || p_min_.y > p_max.y || p_min_.z > p_max.z) continue;
+
+		m_child[i]->RadiusNeighbors(center, radius, Points);
+      }
+    }
+  
+  }
+
+
+
+public:
+  /*enum child{
+    BottomLeftFront = 0,
+    TopLeftFront,
+    BottomRightFront,
+    TopRightFront,
+    BottomLeftBack,
+    TopLeftBack,
+    BottomRightBack,
+    TopRightBack
+  };*/
+>>>>>>> f9304f53d0b1e17b89c7d1951d1a78bee734399e
   void set_position(Point& p, Point& a, Point& b){
 
   }
