@@ -74,9 +74,28 @@ public:
     else
       this->m_child[get_posicion_child(pixel)]->insert(pixel);
   }
-  void search(Point& pixel){
+  pcl::PointCloud<pcl::PointXYZ> & radial_neighbor_search(Point& pixel,float radix){
+    pcl::PointCloud<pcl::PointXYZ> v;
+    recursive_radial_neighbor_search(pixel, radix, v);
+    return v;
   }
 public:
+  void recursive_radial_neighbor_search(Point &pixel,float &radix,pcl::<pcl::PointXYZ> &v){
+    if(!(overloap(pixel, radix)))
+      return;
+    else{
+      if (this->m_child[0] == NULL){
+        v.push_back(*(this->m_data));
+        return;
+      }
+      else
+        for(int i = 0; i < 8; ++i)
+          this->m_child[i]->recursive_radial_neighbor_search(pixel, radix, v);
+    }
+  }
+  bool overloap(Point &pixel, float &radix){
+
+  }
   void set_position(Point& p, Point& a, Point& b){
 
   }

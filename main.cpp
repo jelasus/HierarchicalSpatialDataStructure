@@ -2,9 +2,7 @@
 using namespace std;
 
 int main(int argc, char** argv){
-  Octree *tree = new Octree();
-  VisualPointCloud cloudtree(tree);
-  cloudtree.read_off_file("/home/jesus/HierarchicalSpatialDataStructure/off_files/klingon.off");
+  VisualPointCloud cloudtree("/home/jesus/HierarchicalSpatialDataStructure/off_files/klingon.off");
   cout << "end";
   /*Octree a(4,4,4);
   pcl::PointXYZ b(0,0,0);

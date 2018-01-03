@@ -6,11 +6,30 @@ class VisualPointCloud{
   private:
     Octree* container;
     pcl::PointCloud<pcl::PointXYZ> cloud;
+    vector<pcl::Vertices> polys;
   public:
-    VisualPointCloud(char* file);
+    VisualPointCloud(char* file): container(new Octree()){read_off_file(file);}
     VisualPointCloud(Octree* &p_octree): container(p_octree) {}
-    void visualizate_cloud_points(pcl::PointCloud<pcl::PointXYZ> &v);
-    void visualizate_off_file();
+    void visualizate_cloud_points(pcl::PointCloud<pcl::PointXYZ> &v){
+
+    }
+    void visualizate_off_file(){
+      pcl::PolygonMesh mesh;
+      mesh.polygons = this->polys;
+      pcl::PCLPointCloud2::Ptr cloud_blob(new pcl::PCLPointCloud2);
+      pcl::toPCLPointCloud2(this->cloud, *cloud_blob);
+      mesh.cloud = *cloud_blob;
+      boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+      viewer->setBackgroundColor (0, 0, 0);
+      viewer->addPolygonMesh(mesh,"meshes",0);
+      viewer->addCoordinateSystem (1.0);
+      viewer->initCameraParameters ();
+      while (!viewer->wasStopped ()){
+        viewer->spinOnce (100);
+        boost::this_thread::sleep (boost::posix_time::microseconds (100000));
+      }
+    }
+  private:
     void read_off_file(char* off_file){
       std::ifstream file(off_file);
       std::string line;
@@ -50,26 +69,11 @@ class VisualPointCloud{
       for(int i = 0;i < vertexs; ++i){
         container->insert(this->cloud.points[i]);
       }
-      vector<pcl::Vertices> polys;
       for(int i = 0; i < faces; ++i){
         pcl::Vertices v;
         getline(file,line);
         container->get_polygons(v, line);
-        polys.push_back(v);
-      }
-      pcl::PolygonMesh mesh;
-      mesh.polygons = polys;
-      pcl::PCLPointCloud2::Ptr cloud_blob(new pcl::PCLPointCloud2);
-      pcl::toPCLPointCloud2(this->cloud, *cloud_blob);
-      mesh.cloud = *cloud_blob;
-      boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
-      viewer->setBackgroundColor (0, 0, 0);
-      viewer->addPolygonMesh(mesh,"meshes",0);
-      viewer->addCoordinateSystem (1.0);
-      viewer->initCameraParameters ();
-      while (!viewer->wasStopped ()){
-        viewer->spinOnce (100);
-        boost::this_thread::sleep (boost::posix_time::microseconds (100000));
+        this->polys.push_back(v);
       }
     }
   private:
