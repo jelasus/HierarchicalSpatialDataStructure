@@ -94,7 +94,11 @@ public:
     }
   }
   bool overloap(Point &pixel, float &radix){
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> fa27841fc5c368098ab6f458b3f63269745b601c
   }
   void set_position(Point& p, Point& a, Point& b){
 

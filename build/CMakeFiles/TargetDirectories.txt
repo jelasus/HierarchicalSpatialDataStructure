@@ -1,0 +1,3 @@
+/home/jesus/HierarchicalSpatialDataStructure/build/CMakeFiles/rebuild_cache.dir
+/home/jesus/HierarchicalSpatialDataStructure/build/CMakeFiles/edit_cache.dir
+/home/jesus/HierarchicalSpatialDataStructure/build/CMakeFiles/main.dir
