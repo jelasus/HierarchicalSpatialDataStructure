@@ -1,12 +1,19 @@
 # HierarchicalSpatialDataStructure
 Data structures codes in c++ for Algorithms and Data Structure course
+
+Contributors:
+- Andre Subia Huamán
+- Jesus Lazo Quevedo
+
 List of codes:
 - Quadtree (coming soon)
 - Octree
+
 Requirements: 
 - PCL library
 - g++ compiler
 - make
+
 How compile main.cpp ? 
 If you are using Linux, you just need to compile with cmake
 1. Create a directory build
